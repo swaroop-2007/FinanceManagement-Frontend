@@ -1,17 +1,18 @@
 import React, {useState, useEffect} from "react"
 import api from './api'
+import './App.css';  
 
 const App = () => {
   const [transactions, setTransactions] = useState([]);
   const [formData, setFormData] = useState({
-    amount : '',
-    category : '',
-    description : '',
-    is_income : false,
+    amount: '',
+    category: '',
+    description: '',
+    is_income: false,
     date: ''
-  })
+  });
 
-  const fetchTransactions = async() => {
+  const fetchTransactions = async () => {
     const response = await api.get('/transactions');
     setTransactions(response.data);
   };
@@ -24,7 +25,7 @@ const App = () => {
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
     setFormData({
       ...formData,
-      [event.target.name] : value,
+      [event.target.name]: value,
     });
   };
 
@@ -33,75 +34,68 @@ const App = () => {
     await api.post('/transactions/', formData);
     fetchTransactions();
     setFormData({
-      amount : '',
-      category : '',
-      description : '',
-      is_income : false,
+      amount: '',
+      category: '',
+      description: '',
+      is_income: false,
       date: ''
     });
   };
 
   return (
-    <div>
-      <nav className="navbar navbar-dark bg-primary">
+    <div className="app-container">
+      <nav className="navbar navbar-expand-lg navbar-dark custom-navbar">
         <div className="container-fluid">
-          <a className="navbar-brand" href='#'>
-            Finances Tracker App
+          <a className="navbar-brand" href="#">
+            <strong>Finance Tracker App</strong>
           </a>
         </div>
       </nav>
 
-      <div className="container">
-        <form onSubmit={handleFormSubmit}>
-          <div className="mb-3 mt-3">
-            <label htmlFor="amount"className="form-label">
+      <div className="container mt-5">
+        <form onSubmit={handleFormSubmit} className="form-container p-4 rounded">
+          <h4 className="text-center mb-4">Add a New Transaction</h4>
+
+          <div className="mb-3">
+            <label htmlFor="amount" className="form-label">
               Amount
             </label>
-            <input type="text" className="form-control" id="amount" name="amount" onChange={handleInputChange} value={formData.amount}/>
+            <input type="text" className="form-control" id="amount" name="amount" onChange={handleInputChange} value={formData.amount} />
           </div>
 
-
           <div className="mb-3">
-            <label htmlFor="category"className="form-label">
+            <label htmlFor="category" className="form-label">
               Category
             </label>
-            <input type="text" className="form-control" id="category" name="category" onChange={handleInputChange} value={formData.category}/>
+            <input type="text" className="form-control" id="category" name="category" onChange={handleInputChange} value={formData.category} />
           </div>
 
-
           <div className="mb-3">
-            <label htmlFor="description"className="form-label">
+            <label htmlFor="description" className="form-label">
               Description
             </label>
-            <input type="text" className="form-control" id="description" name="description" onChange={handleInputChange} value={formData.description}/>
+            <input type="text" className="form-control" id="description" name="description" onChange={handleInputChange} value={formData.description} />
           </div>
 
-
-          <div className="mb-3">
-            <label htmlFor="is_income"className="form-label">
+          <div className="form-check mb-3">
+            <input type="checkbox" className="form-check-input" id="is_income" name="is_income" onChange={handleInputChange} checked={formData.is_income} />
+            <label htmlFor="is_income" className="form-check-label">
               Income?
             </label>
-            <input type="checkbox"  id="is_income" name="is_income" onChange={handleInputChange} value={formData.is_income}/>
           </div>
 
           <div className="mb-3">
-            <label htmlFor="date"className="form-label">
+            <label htmlFor="date" className="form-label">
               Date
             </label>
-            <input type="text" className="form-control" id="date" name="date" onChange={handleInputChange} value={formData.date}/>
+            <input type="text" className="form-control" id="date" name="date" onChange={handleInputChange} value={formData.date} />
           </div>
 
-
-          <button type="submit" className="btn btn-primary">  
-            Submit
-          </button>
-
-
-
+          <button type="submit" className="btn btn-success w-100">Submit</button>
         </form>
 
-        <table className="table table-striped table-bordered table-hover">
-          <thead>
+        <table className="table table-striped table-bordered table-hover mt-5">
+          <thead className="table-dark">
             <tr>
               <th>Amount</th>
               <th>Category</th>
@@ -112,7 +106,7 @@ const App = () => {
           </thead>
           <tbody>
             {transactions.map((transaction) => (
-              <tr key={transaction.id}>
+              <tr key={transaction.id} className="table-row-hover">
                 <td>{transaction.amount}</td>
                 <td>{transaction.category}</td>
                 <td>{transaction.description}</td>
@@ -123,11 +117,8 @@ const App = () => {
           </tbody>
         </table>
       </div>
-
     </div>
-  )
-
-}
-
+  );
+};
 
 export default App;
